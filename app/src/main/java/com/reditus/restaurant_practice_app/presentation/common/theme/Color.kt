@@ -1,4 +1,4 @@
-package com.reditus.restaurant_practice_app.ui.theme
+package com.reditus.restaurant_practice_app.presentation.common.theme
 
 import androidx.compose.ui.graphics.Color
 
