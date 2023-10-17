@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.reditus.restaurant_practice_app.domain.repository.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,14 +15,17 @@ class UserViewModel @Inject constructor(
 ): ViewModel(){
 
 
-    private fun login(
+    fun login(
         username: String,
         password: String
     ) {
-        viewModelScope.launch {
-            val jwtToken = userRepository.login(username, password)
-            //TODO
-            Log.d("user", "login: $jwtToken")
+        viewModelScope.launch(Dispatchers.IO) {
+            try{
+                val jwtToken = userRepository.login(username, password)
+                Log.d("user", jwtToken.toString())
+            }catch (e: Exception){
+                Log.d("user", e.toString())
+            }
         }
     }
 }
