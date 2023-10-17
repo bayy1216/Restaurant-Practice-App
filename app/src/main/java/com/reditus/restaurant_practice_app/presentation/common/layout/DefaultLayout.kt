@@ -2,6 +2,7 @@ package com.reditus.restaurant_practice_app.presentation.common.layout
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -21,7 +22,7 @@ fun DefaultLayout(
     content: @Composable () -> Unit
 ){
     Scaffold(
-        modifier = modifier?: Modifier.fillMaxWidth().fillMaxHeight(),
+        modifier = modifier?: Modifier.fillMaxSize(),
         topBar = {
             title?.let {
                 TopAppBar(
