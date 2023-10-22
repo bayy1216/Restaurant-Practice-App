@@ -2,6 +2,7 @@ package com.reditus.restaurant_practice_app.presentation.common.layout
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,10 +21,9 @@ fun DefaultLayout(
     title: String? = null,
     bottomBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable (paddingValues: PaddingValues) -> Unit
 ){
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
         topBar = {
             title?.let {
                 TopAppBar(
@@ -37,6 +37,6 @@ fun DefaultLayout(
         floatingActionButton = floatingActionButton,
 
     ) {
-        content()
+        content(it)
     }
 }
