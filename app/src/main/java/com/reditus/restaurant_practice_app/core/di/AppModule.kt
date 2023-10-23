@@ -1,7 +1,6 @@
 package com.reditus.restaurant_practice_app.core.di
 
-import com.reditus.restaurant_practice_app.data.api.user.UserApi
-import com.reditus.restaurant_practice_app.data.api.restaurant.RestaurantApi
+import com.reditus.restaurant_practice_app.data.api.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,12 +45,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providerAuthApi(retrofit: Retrofit): UserApi {
-        return retrofit.create(UserApi::class.java)
-    }
-    @Singleton
-    @Provides
-    fun providerRestaurantApi(retrofit: Retrofit): RestaurantApi{
-        return retrofit.create(RestaurantApi::class.java)
+    fun providerApi(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
     }
 }
