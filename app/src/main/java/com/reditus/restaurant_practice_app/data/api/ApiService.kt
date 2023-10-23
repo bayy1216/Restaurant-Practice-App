@@ -10,12 +10,14 @@ import com.reditus.restaurant_practice_app.data.dto.user.UserInfoDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
     @POST("/auth/login")
+    @Headers("Auth: false")
     suspend fun login(
         @Header("authorization") authorization: String
     ): LoginResponse
@@ -27,7 +29,7 @@ interface ApiService {
 
     @GET("/restaurant")
     suspend fun paginateRestaurant(
-        @Query("after") after: String,
+        @Query("after") after: String?,
         @Query("count") count: Int = 20,
     ) : PaginationResponse<RestaurantDto>
 
@@ -39,7 +41,7 @@ interface ApiService {
     @GET("/restaurant/{rid}/rating")
     suspend fun paginateRating(
         @Path("rid") rid: String,
-        @Query("after") after: String,
+        @Query("after") after: String?,
         @Query("count") count: Int = 20,
     ) : PaginationResponse<RatingDto>
 
