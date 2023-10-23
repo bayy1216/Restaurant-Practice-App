@@ -25,7 +25,7 @@ import com.reditus.restaurant_practice_app.presentation.common.layout.DefaultLay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(viewModel: UserViewModel = viewModel()) {
+fun LoginScreen(viewModel: UserViewModel) {
     val id = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     DefaultLayout {
