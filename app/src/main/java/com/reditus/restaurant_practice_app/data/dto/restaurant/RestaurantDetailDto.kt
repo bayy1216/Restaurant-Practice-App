@@ -1,5 +1,8 @@
 package com.reditus.restaurant_practice_app.data.dto.restaurant
 
+import com.reditus.restaurant_practice_app.domain.model.restaurant.Product
+import com.reditus.restaurant_practice_app.domain.model.restaurant.RestaurantDetail
+
 data class RestaurantDetailDto(
     val id: String,
     val name: String,
@@ -14,6 +17,22 @@ data class RestaurantDetailDto(
     val products: List<ProductDto>,
 )
 
+fun RestaurantDetailDto.toDomain(): RestaurantDetail{
+    return RestaurantDetail(
+        id = id,
+        name = name,
+        thumbnailUrl = thumbnailUrl,
+        tags = tags,
+        priceRange = priceRange,
+        ratings = ratings,
+        ratingsCount = ratingsCount,
+        deliveryTime = deliveryTime,
+        deliveryFee = deliveryFee,
+        detail = detail,
+        products = products.map { it.toDomain() },
+    )
+}
+
 
 data class ProductDto(
     val id: String,
@@ -22,3 +41,13 @@ data class ProductDto(
     val detail: String,
     val price: Int,
 )
+
+fun ProductDto.toDomain():Product{
+    return Product(
+        id = id,
+        name = name,
+        imgUrl = imgUrl,
+        detail = detail,
+        price = price,
+    )
+}

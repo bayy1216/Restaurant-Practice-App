@@ -1,5 +1,7 @@
 package com.reditus.restaurant_practice_app.data.dto.restaurant
 
+import com.reditus.restaurant_practice_app.domain.model.restaurant.Restaurant
+
 data class RestaurantDto(
     val id: String,
     val name: String,
@@ -11,3 +13,17 @@ data class RestaurantDto(
     val deliveryTime: Int,
     val deliveryFee: Int,
 )
+
+fun RestaurantDto.toDomain(): Restaurant{
+    return Restaurant(
+        id = id,
+        name = name,
+        thumbnailUrl = thumbnailUrl,
+        tags = tags,
+        priceRange = priceRange,
+        ratings = ratings,
+        ratingsCount = ratingsCount,
+        deliveryTime = deliveryTime,
+        deliveryFee = deliveryFee,
+    )
+}
