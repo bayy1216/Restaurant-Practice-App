@@ -13,6 +13,7 @@ import com.reditus.restaurant_practice_app.presentation.view.restaurant.Restaura
 import com.reditus.restaurant_practice_app.presentation.view.restaurant.RestaurantScreen
 import com.reditus.restaurant_practice_app.presentation.view.user.LoginScreen
 import com.reditus.restaurant_practice_app.presentation.view.user.ProfileScreen
+import com.reditus.restaurant_practice_app.presentation.viewmodel.restaurant.RestaurantViewModel
 import com.reditus.restaurant_practice_app.presentation.viewmodel.user.UserViewModel
 
 enum class Router(val korean: String) {
@@ -28,14 +29,15 @@ enum class Router(val korean: String) {
 fun MyAppHost(navController: NavHostController){
     NavHost(
         navController = navController,
-        startDestination = "root_tab"
+        startDestination = Router.LOGIN.name
     ){
         navigation(
             startDestination = Router.RESTAURANT_LIST.name,
             route = "root_tab"
         ){
             composable(Router.RESTAURANT_LIST.name){
-                RestaurantScreen(navController)
+                val viewModel = hiltViewModel<RestaurantViewModel>()
+                RestaurantScreen(navController,viewModel)
             }
             composable(Router.PRODUCT_LIST.name){
                 ProductScreen()
@@ -54,7 +56,7 @@ fun MyAppHost(navController: NavHostController){
         }
         composable(Router.LOGIN.name){
             val viewModel = hiltViewModel<UserViewModel>()
-            LoginScreen(viewModel)
+            LoginScreen(navController,viewModel)
         }
     }
 }

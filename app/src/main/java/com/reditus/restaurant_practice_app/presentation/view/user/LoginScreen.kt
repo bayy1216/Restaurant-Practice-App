@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -21,13 +22,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.reditus.restaurant_practice_app.presentation.viewmodel.user.UserViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.reditus.restaurant_practice_app.presentation.common.layout.DefaultLayout
+import com.reditus.restaurant_practice_app.presentation.common.navigation.Router
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(viewModel: UserViewModel) {
+fun LoginScreen(
+    navController: NavHostController,
+    viewModel: UserViewModel
+) {
     val id = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+
+    val isLogin = viewModel.isLogin.collectAsState()
     DefaultLayout {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -54,6 +62,13 @@ fun LoginScreen(viewModel: UserViewModel) {
             ) {
                 Text(text = "Login")
 
+            }
+            TextButton(onClick = {
+                if(isLogin.value){
+                    navController.navigate(Router.RESTAURANT_LIST.name)
+                }
+            }) {
+                Text(text = "Sign Up")
             }
         }
     }
