@@ -21,7 +21,7 @@ class RestaurantRepositoryImpl @Inject constructor(
 
     override suspend fun paginate(
         id: String?,
-        after: String,
+        after: String?,
         count: Int
     ): CursorPagination<Restaurant> {
         val resp = apiService.paginateRestaurant(after, count)

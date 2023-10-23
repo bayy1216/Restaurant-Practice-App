@@ -3,7 +3,7 @@ package com.reditus.restaurant_practice_app.domain.model.restaurant
 class RestaurantDetail(
     id: String,
     name: String,
-    thumbnailUrl: String,
+    thumbUrl: String,
     tags: List<String>,
     priceRange: String,
     ratings: Float,
@@ -15,7 +15,7 @@ class RestaurantDetail(
 ) : Restaurant(
     id = id,
     name = name,
-    thumbnailUrl = thumbnailUrl,
+    thumbUrl = thumbUrl,
     tags = tags,
     priceRange = priceRange,
     ratings = ratings,

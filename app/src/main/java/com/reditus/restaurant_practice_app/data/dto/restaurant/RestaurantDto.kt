@@ -5,7 +5,7 @@ import com.reditus.restaurant_practice_app.domain.model.restaurant.Restaurant
 data class RestaurantDto(
     val id: String,
     val name: String,
-    val thumbnailUrl: String,
+    val thumbUrl: String,
     val tags: List<String>,
     val priceRange: String,
     val ratings: Float,
@@ -18,7 +18,7 @@ fun RestaurantDto.toDomain(): Restaurant{
     return Restaurant(
         id = id,
         name = name,
-        thumbnailUrl = thumbnailUrl,
+        thumbUrl = thumbUrl,
         tags = tags,
         priceRange = priceRange,
         ratings = ratings,
