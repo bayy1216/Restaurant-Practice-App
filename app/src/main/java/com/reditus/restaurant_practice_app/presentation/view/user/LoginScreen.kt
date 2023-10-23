@@ -1,27 +1,22 @@
 package com.reditus.restaurant_practice_app.presentation.view.user
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.reditus.restaurant_practice_app.presentation.viewmodel.user.UserViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.reditus.restaurant_practice_app.presentation.common.layout.DefaultLayout
 import com.reditus.restaurant_practice_app.presentation.common.navigation.Router
@@ -35,7 +30,14 @@ fun LoginScreen(
     val id = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
-    val isLogin = viewModel.isLogin.collectAsState()
+    val isLogin = viewModel.isLogin
+    if(isLogin.value){
+        LaunchedEffect(Unit){
+            navController.navigate(Router.RESTAURANT_LIST.name){
+                launchSingleTop = true
+            }
+        }
+    }
     DefaultLayout {
         Column(
             modifier = Modifier.fillMaxSize(),

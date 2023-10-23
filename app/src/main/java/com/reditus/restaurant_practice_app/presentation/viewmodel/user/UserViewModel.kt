@@ -2,15 +2,13 @@ package com.reditus.restaurant_practice_app.presentation.viewmodel.user
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reditus.restaurant_practice_app.domain.model.restaurant.Restaurant
 import com.reditus.restaurant_practice_app.domain.repository.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +18,8 @@ class UserViewModel @Inject constructor(
     private val prefs: SharedPreferences
 ): ViewModel(){
 
-    private val _isLogin = MutableStateFlow(false)
-    val isLogin :StateFlow<Boolean> = _isLogin.asStateFlow()
+    private val _isLogin = mutableStateOf(false)
+    val isLogin :State<Boolean> = _isLogin
 
     init {
         prefs.getString("accessToken", null)?.let {
