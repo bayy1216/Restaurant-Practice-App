@@ -74,7 +74,7 @@ dependencies {
     //network
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    platform("com.squareup.okhttp3:okhttp-bom:4.9.0")
+    implementation(platform(libs.okthhp.bom))
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
 
@@ -96,6 +96,7 @@ dependencies {
     implementation(libs.paging.compose)
 
     implementation(project(":domain"))
+    implementation(project(":data"))
 }
 
 kapt {

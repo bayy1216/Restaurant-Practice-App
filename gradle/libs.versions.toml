@@ -3,7 +3,7 @@ androidGradlePlugin = "8.1.1"
 
 retrofit = "2.9.0"
 logging-interceptor = "4.9.1"
-
+okhttp-bom = "4.9.0"
 compose-navigation = "2.5.1"
 
 viewmodel-compose = "2.6.0"
@@ -43,14 +43,14 @@ compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 #network
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-
-# platform("com.squareup.okhttp3:okhttp-bom:4.9.0")
+okthhp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp-bom" }
 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp"}
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
 
 #hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 #kapt("com.google.dagger:hilt-android-compiler:2.44")
 
 #viewModel compose
@@ -84,3 +84,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 android-library = { id = "com.android.library", version.ref = "androidStudioGradlePlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
