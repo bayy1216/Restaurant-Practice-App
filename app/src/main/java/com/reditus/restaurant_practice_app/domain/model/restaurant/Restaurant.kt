@@ -1,7 +1,9 @@
 package com.reditus.restaurant_practice_app.domain.model.restaurant
 
+import com.reditus.restaurant_practice_app.domain.model.common.ModelWithId
+
 open class Restaurant(
-    val id: String,
+    override val id: String,
     val name: String,
     val thumbUrl: String,
     val tags: List<String>,
@@ -10,4 +12,4 @@ open class Restaurant(
     val ratingsCount: Int,
     val deliveryTime: Int,
     val deliveryFee: Int,
-)
+) : ModelWithId

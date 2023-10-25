@@ -1,6 +1,6 @@
 package com.reditus.restaurant_practice_app.domain.model.common
 
-data class CursorPagination<T> (
+data class CursorPagination<T : ModelWithId> (
     val meta: Meta,
     val data: List<T>,
 )
