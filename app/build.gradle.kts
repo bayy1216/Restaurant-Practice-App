@@ -87,6 +87,10 @@ dependencies {
     //navigation
     implementation("androidx.navigation:navigation-compose:2.5.1")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    //coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
 }
 
 kapt {

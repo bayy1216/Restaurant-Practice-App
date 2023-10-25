@@ -20,17 +20,20 @@ class RestaurantViewModel @Inject constructor(
     private val _restaurants = MutableStateFlow(listOf<Restaurant>())
     val restaurants : StateFlow<List<Restaurant>> = _restaurants.asStateFlow()
 
+    private val hasMore = MutableStateFlow(true)
 
     init {
         getRestaurants()
     }
     fun getRestaurants(){
         viewModelScope.launch {
-            try{
-                val resp = restaurantRepository.paginate()
-                _restaurants.value = resp.data
-            }catch (e: Exception){
-                e.printStackTrace()
+            kotlin.runCatching {
+                restaurantRepository.paginate()
+            }.onSuccess {
+                _restaurants.value = it.data
+                hasMore.value = it.meta.hasMore
+            }.onFailure {
+                it.printStackTrace()
             }
         }
     }
