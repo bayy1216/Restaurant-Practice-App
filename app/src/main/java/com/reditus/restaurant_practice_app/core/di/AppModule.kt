@@ -1,6 +1,5 @@
 package com.reditus.restaurant_practice_app.core.di
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
@@ -10,11 +9,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.runBlocking
+import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import okhttp3.Route
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -22,7 +23,43 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 import javax.inject.Singleton
 
+class AuthInterceptor @Inject constructor(
+    private val prefs: SharedPreferences
+) : Authenticator{
+    override fun authenticate(route: Route?, response: Response): Request? {
+        val originRequest = response.request
+        if(originRequest.header("Authorization").isNullOrEmpty()){
+            return null
+        }
+        val refreshToken = runBlocking {
+            prefs.getString("refreshToken", "")
+        }
+        val refreshRequest = Request.Builder()
+            .url("https://restaurant-app.run.goorm.site/auth/token")
+            .post("".toRequestBody())
+            .addHeader("authorization", "Bearer ${refreshToken!!}")
+            .build()
+        val refreshResponse = OkHttpClient().newCall(refreshRequest).execute()
+        Log.d("refreshResponse", "refresh :${refreshResponse.code}, ${refreshResponse.body}")
+        if(refreshResponse.code == 201) {
+            val gson = Gson()
+            val refreshResponseJson = gson.fromJson(refreshResponse.body?.string(), Map::class.java)
+            val newAccessToken = refreshResponseJson["accessToken"].toString()
+            prefs.edit().putString("accessToken", newAccessToken).apply()
+            val newRequest = originRequest.newBuilder()
+                .removeHeader("Authorization")
+                .addHeader("Authorization", "Bearer $newAccessToken")
+                .build()
+            return newRequest
+        }else{
+            prefs.edit().remove("accessToken").apply()
+            prefs.edit().remove("refreshToken").apply()
+        }
+        return null
 
+    }
+
+}
 
 class HeaderInterceptor @Inject constructor(
     private val prefs: SharedPreferences
@@ -45,42 +82,6 @@ class HeaderInterceptor @Inject constructor(
             .build()
         val response = chain.proceed(newRequest)
 
-        //accessToken이 만료되었을 때
-        if(response.code == 401){
-            response.close()
-            val x = HttpLoggingInterceptor()
-                .setLevel(HttpLoggingInterceptor.Level.BODY)
-            val okHttp = OkHttpClient.Builder().addInterceptor(x).build()
-
-            val refreshToken = runBlocking {
-                prefs.getString("refreshToken", "")
-            }
-
-            val refreshRequest = Request.Builder()
-                .url("https://restaurant-app.run.goorm.site/auth/token")
-                .post("".toRequestBody())
-                .addHeader("authorization", "Bearer ${refreshToken!!}")
-                .build()
-
-            val refreshResponse = okHttp.newCall(refreshRequest).execute()
-
-            if(refreshResponse.code == 201){
-                val gson = Gson()
-                val refreshResponseJson = gson.fromJson(refreshResponse.body?.string(), Map::class.java)
-                val newAccessToken = refreshResponseJson["accessToken"].toString()
-                prefs.edit().putString("accessToken", newAccessToken).apply()
-                val originRequest = chain.request().newBuilder()
-                    .removeHeader("Authorization")
-                    .addHeader("Authorization", "Bearer $newAccessToken")
-                    .build()
-                return chain.proceed(originRequest)
-            }else{
-                //TODO: 로그아웃 처리
-                prefs.edit().remove("accessToken").apply()
-                prefs.edit().remove("refreshToken").apply()
-            }
-        }
-
 
         return response
     }
@@ -97,6 +98,13 @@ object AppModule {
     fun provideHeaderInterceptor(autoLoginPreferences: SharedPreferences): HeaderInterceptor {
         return HeaderInterceptor(autoLoginPreferences)
     }
+
+    @Singleton
+    @Provides
+    fun provideAuthInterceptor(autoLoginPreferences: SharedPreferences): Authenticator {
+        return AuthInterceptor(autoLoginPreferences)
+    }
+
     @Singleton
     @Provides
     fun provideInterceptor(): Interceptor {
@@ -106,12 +114,13 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(headerInterceptor: HeaderInterceptor): OkHttpClient {
+    fun provideOkHttpClient(headerInterceptor: HeaderInterceptor, authInterceptor: AuthInterceptor): OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(headerInterceptor)
+            .authenticator(authInterceptor)
             .build()
     }
 
